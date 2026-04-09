@@ -2,6 +2,8 @@ import React, { useState, useRef, useCallback } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
+import type { CipherKey, GematriaResponse } from '../lib/gematria-engine';
+import { CIPHER_DEFS } from '../lib/gematria-engine';
 import Logo from '../components/Logo';
 import ThemeToggle from '../components/ThemeToggle';
 import CipherSidebar from '../components/CipherSidebar';
@@ -15,25 +17,15 @@ import SearchHistory from '../components/SearchHistory';
 import GlyphMatrix from '../components/GlyphMatrix';
 import s from '../styles/Home.module.css';
 
-const CIPHER_COLORS: Record<string, string> = {
-  ordinal: 'var(--a1)', pythagorean: 'var(--a2)', reverse: 'var(--a3)',
-  sumerian: 'var(--a4)', chaldean: 'var(--a5)', hebrew: 'var(--a6)',
-};
-
-const CIPHER_LABELS: Record<string, string> = {
-  ordinal: 'Ordinal', pythagorean: 'Pythagorean', reverse: 'Reverse',
-  sumerian: 'Sumerian', chaldean: 'Chaldean', hebrew: 'Hebrew',
-};
-
 type Tab = 'breakdown' | 'grid' | 'glyph' | 'json';
 
 const HomePage: NextPage = () => {
-  const [word, setWord]           = useState('');
-  const [result, setResult]       = useState<any>(null);
-  const [loading, setLoading]     = useState(false);
-  const [activeCipher, setActiveCipher] = useState('ordinal');
-  const [activeTab, setActiveTab] = useState<Tab>('breakdown');
-  const [history, setHistory]     = useState<string[]>([]);
+  const [word, setWord]               = useState('');
+  const [result, setResult]           = useState<GematriaResponse | null>(null);
+  const [loading, setLoading]         = useState(false);
+  const [activeCipher, setActiveCipher] = useState<CipherKey>('english_ordinal');
+  const [activeTab, setActiveTab]     = useState<Tab>('breakdown');
+  const [history, setHistory]         = useState<string[]>([]);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const analyze = useCallback(async (w?: string) => {
@@ -46,10 +38,10 @@ const HomePage: NextPage = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ word: q }),
       });
-      const data = await res.json();
+      const data: GematriaResponse = await res.json();
       setResult(data);
       setHistory(h => [...new Set([...h.filter(x => x !== q), q])].slice(-12));
-    } catch {}
+    } catch { /* silent */ }
     setLoading(false);
   }, [word]);
 
@@ -58,25 +50,32 @@ const HomePage: NextPage = () => {
   };
 
   const cipherData = result?.ciphers?.[activeCipher];
-  const letters    = result?.original_input
-    ? result.original_input.toUpperCase().replace(/[^A-Z]/g,'').split('')
+  const letters    = result
+    ? result.original_input.toUpperCase().replace(/[^A-Z]/g, '').split('')
     : [];
 
   const radarData = result
-    ? Object.entries(result.ciphers ?? {}).map(([k, v]: any) => ({
-        label: k.substring(0,3).toUpperCase(),
-        value: v.total ?? 0,
-        color: CIPHER_COLORS[k] ?? 'var(--pr)',
+    ? CIPHER_DEFS.map(d => ({
+        label: d.name.substring(0, 3).toUpperCase(),
+        value: result.ciphers[d.key].total,
+        color: d.color,
       }))
     : [];
 
   const barData = result
-    ? Object.entries(result.ciphers ?? {}).map(([k, v]: any) => ({
-        label: CIPHER_LABELS[k] ?? k,
-        value: v.total ?? 0,
-        color: CIPHER_COLORS[k] ?? 'var(--pr)',
+    ? CIPHER_DEFS.map(d => ({
+        label: d.name,
+        value: result.ciphers[d.key].total,
+        color: d.color,
       }))
     : [];
+
+  const tabLabels: Record<Tab, string> = {
+    breakdown: '▣ Table',
+    grid: '▦ Grid',
+    glyph: 'ℵ Glyph',
+    json: '{ } JSON',
+  };
 
   return (
     <>
@@ -99,25 +98,30 @@ const HomePage: NextPage = () => {
         <div className={s.body}>
           {/* SIDEBAR */}
           <aside className={s.sidebar}>
-            {result && (
+            {result ? (
               <>
                 <CipherSidebar
-                  ciphers={result.ciphers}
+                  data={result}
                   active={activeCipher}
                   onSelect={setActiveCipher}
                 />
                 <div style={{ marginTop: 'var(--s4)' }}>
                   <NumerologyCard summary={result.numerology_summary} />
                 </div>
-                {/* Radar */}
                 <div className={s.card} style={{ padding: 'var(--s4)' }}>
                   <div className={s.cardTitle}>Cipher Radar</div>
                   <RadarChart ciphers={radarData} size={220} />
                 </div>
               </>
-            )}
-            {!result && (
-              <div style={{ padding: 'var(--s4)', color: 'var(--txf)', fontSize: 'var(--tx1)', lineHeight: 1.7, fontFamily: 'var(--fd)', fontStyle: 'italic' }}>
+            ) : (
+              <div style={{
+                padding: 'var(--s4)',
+                color: 'var(--txf)',
+                fontSize: 'var(--tx1)',
+                lineHeight: 1.7,
+                fontFamily: 'var(--fd)',
+                fontStyle: 'italic',
+              }}>
                 Enter any word or phrase to decode its gematric signature across 6 ancient cipher systems.
               </div>
             )}
@@ -125,7 +129,7 @@ const HomePage: NextPage = () => {
 
           {/* MAIN */}
           <main className={s.main}>
-            {/* INPUT */}
+            {/* INPUT CARD */}
             <div className={s.card}>
               <div className={s.heroWrap}>
                 <textarea
@@ -140,7 +144,10 @@ const HomePage: NextPage = () => {
                   spellCheck={false}
                   style={{ minHeight: '60px' }}
                 />
-                <div className={s.heroUnderline} style={{ transform: word ? 'scaleX(1)' : 'scaleX(0)' }} />
+                <div
+                  className={s.heroUnderline}
+                  style={{ transform: word ? 'scaleX(1)' : 'scaleX(0)' }}
+                />
               </div>
               <div className={s.heroMeta}>
                 <button
@@ -152,7 +159,7 @@ const HomePage: NextPage = () => {
                 </button>
                 {word && (
                   <span className={s.heroCount}>
-                    {word.replace(/[^A-Za-z]/g,'').length} letters
+                    {word.replace(/[^A-Za-z]/g, '').length} letters
                   </span>
                 )}
               </div>
@@ -175,9 +182,16 @@ const HomePage: NextPage = () => {
                 {/* Active cipher detail */}
                 {cipherData && (
                   <div className={s.card}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--s4)', flexWrap: 'wrap', gap: 'var(--s3)' }}>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginBottom: 'var(--s4)',
+                      flexWrap: 'wrap',
+                      gap: 'var(--s3)',
+                    }}>
                       <div className={s.cardTitle} style={{ marginBottom: 0 }}>
-                        {CIPHER_LABELS[activeCipher] ?? activeCipher}
+                        {CIPHER_DEFS.find(d => d.key === activeCipher)?.name ?? activeCipher}
                       </div>
                       <div className={s.totalBadge}>
                         <span className={s.totalNum}>{cipherData.total}</span>
@@ -187,13 +201,13 @@ const HomePage: NextPage = () => {
 
                     {/* Tabs */}
                     <div className={s.tabs} style={{ marginBottom: 'var(--s5)' }}>
-                      {(['breakdown','grid','glyph','json'] as Tab[]).map(t => (
+                      {(['breakdown', 'grid', 'glyph', 'json'] as Tab[]).map(t => (
                         <button
                           key={t}
                           className={`${s.tab} ${activeTab === t ? s.tabActive : ''}`}
                           onClick={() => setActiveTab(t)}
                         >
-                          {t === 'breakdown' ? '⊞ Table' : t === 'grid' ? '▦ Grid' : t === 'glyph' ? 'ℵ Glyph' : '{ } JSON'}
+                          {tabLabels[t]}
                         </button>
                       ))}
                     </div>
@@ -205,11 +219,14 @@ const HomePage: NextPage = () => {
                       <LetterGrid
                         letters={letters}
                         values={cipherData.breakdown}
-                        accentVar={`--${['a1','a2','a3','a4','a5','a6'][Object.keys(result.ciphers).indexOf(activeCipher)] ?? 'pr'}`}
+                        accentVar={`--a${CIPHER_DEFS.findIndex(d => d.key === activeCipher) + 1}`}
                       />
                     )}
                     {activeTab === 'glyph' && (
-                      <GlyphMatrix word={result.original_input} cipher={cipherData.breakdown} />
+                      <GlyphMatrix
+                        word={result.original_input}
+                        cipher={cipherData.breakdown}
+                      />
                     )}
                     {activeTab === 'json' && (
                       <JsonOutput data={result} />

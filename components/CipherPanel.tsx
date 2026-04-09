@@ -1,47 +1,56 @@
-import { CipherResult, CIPHER_DEFS } from '@/lib/gematria-engine';
-import styles from '@/styles/CipherPanel.module.css';
+import type { CipherKey, CipherResult } from '../lib/gematria-engine';
+import { CIPHER_DEFS } from '../lib/gematria-engine';
+import styles from '../styles/CipherPanel.module.css';
 
-type Def = typeof CIPHER_DEFS[number];
+interface Props {
+  cipher: CipherKey;
+  data: CipherResult;
+}
 
-type Props = {
-  def: Def;
-  cipher: CipherResult;
-};
+export default function CipherPanel({ cipher, data }: Props) {
+  const def = CIPHER_DEFS.find(d => d.key === cipher);
+  const entries = Object.entries(data.breakdown);
+  const max = Math.max(...entries.map(([, v]) => v), 1);
 
-export default function CipherPanel({ def, cipher }: Props) {
   return (
-    <div className={styles.panel}>
-      <div className={styles.header}>
-        <div>
-          <div className={styles.name} style={{ color: def.color }}>{def.name}</div>
-          <div className={styles.sub}>{def.sub}</div>
+    <div className={styles.wrap}>
+      {def && (
+        <div className={styles.meta}>
+          <span className={styles.sub}>{def.sub}</span>
         </div>
-        <div className={styles.total} style={{ color: def.color }}>{cipher.total}</div>
-      </div>
+      )}
 
-      <div className={styles.body}>
-        <div className={styles.sectionLabel}>Character Breakdown</div>
-        <div className={styles.breakdown}>
-          {Object.entries(cipher.breakdown).map(([k, v]) => (
-            <div key={k} className={styles.lc}>
-              <span className={styles.lcChar}>{k.replace(/\d+$/, '')}</span>
-              <span className={styles.lcVal}>{v}</span>
+      <div className={styles.table}>
+        <div className={styles.thead}>
+          <span>Letter</span>
+          <span>Value</span>
+          <span>Bar</span>
+        </div>
+        {entries.map(([k, v]) => (
+          <div key={k} className={styles.row}>
+            <span className={styles.letter}>{k}</span>
+            <span className={styles.val}>{v}</span>
+            <div className={styles.barWrap}>
+              <div
+                className={styles.bar}
+                style={{
+                  width: `${(v / max) * 100}%`,
+                  background: def?.color ?? 'var(--pr)',
+                }}
+              />
             </div>
-          ))}
-        </div>
-
-        <div className={styles.sectionLabel}>Words with same value</div>
-        <div className={styles.pills}>
-          {cipher.matching_words.map((w, i) => (
-            <span
-              key={i}
-              className={`${styles.pill} ${w === '—' ? styles.pillEmpty : ''}`}
-            >
-              {w}
-            </span>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
+
+      {data.matching_words?.some(w => w !== '—') && (
+        <div className={styles.matches}>
+          <span className={styles.matchLbl}>Same value:</span>
+          {data.matching_words.filter(w => w !== '—').map((w, i) => (
+            <span key={i} className={styles.matchWord}>{w}</span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

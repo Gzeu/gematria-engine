@@ -1,18 +1,26 @@
-import styles from '@/styles/NumerologyCard.module.css';
-import { NUMEROLOGY_MEANINGS } from '@/lib/gematria-engine';
+import styles from '../styles/NumerologyCard.module.css';
 
-type Props = { baseNumber: number; summary: string };
+interface Props {
+  summary: string;
+}
 
-export default function NumerologyCard({ baseNumber }: Props) {
-  const isMaster = [11, 22, 33].includes(baseNumber);
+export default function NumerologyCard({ summary }: Props) {
+  // Extract base number from summary string like "...reduces to 7 — The number 7..."
+  const match = summary.match(/reduces to (\d+)/);
+  const num   = match ? parseInt(match[1]) : null;
+  const isMaster = num === 11 || num === 22 || num === 33;
+
   return (
     <div className={styles.card}>
-      <div className={styles.lbl}>Numerology</div>
-      <div className={styles.number}>
-        {baseNumber}
-        {isMaster && <span className={styles.master}>Master</span>}
+      <div className={styles.header}>
+        <span className={styles.label}>Numerology</span>
+        {num !== null && (
+          <span className={`${styles.badge} ${isMaster ? styles.master : ''}`}>
+            {isMaster ? `✦ ${num}` : num}
+          </span>
+        )}
       </div>
-      <p className={styles.meaning}>{NUMEROLOGY_MEANINGS[baseNumber]}</p>
+      <p className={styles.text}>{summary}</p>
     </div>
   );
 }
