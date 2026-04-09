@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import '@/styles/globals.css';
@@ -20,10 +21,18 @@ export default function App({ Component, pageProps }: AppProps) {
 }
 
 function ThemeProvider({ children }: { children: React.ReactNode }) {
-  if (typeof window !== 'undefined') {
-    const saved = sessionStorage.getItem('theme');
-    const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', saved || system);
-  }
+  useEffect(() => {
+    // Runs only on client — safe to access window/sessionStorage here
+    try {
+      const saved = sessionStorage.getItem('theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', saved || system);
+    } catch {
+      // sessionStorage blocked (e.g. incognito strict mode) — fallback to system
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', system);
+    }
+  }, []);
+
   return <>{children}</>;
 }

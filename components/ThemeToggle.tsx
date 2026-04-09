@@ -2,14 +2,23 @@ import { useEffect, useState } from 'react';
 import styles from '@/styles/ThemeToggle.module.css';
 
 export default function ThemeToggle() {
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(true); // default dark — matches server render
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const saved = sessionStorage.getItem('theme');
-    const system = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isDark = saved ? saved === 'dark' : system;
-    setDark(isDark);
-    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    // Only runs on client — never on server
+    setMounted(true);
+    try {
+      const saved = sessionStorage.getItem('theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = saved ? saved === 'dark' : system;
+      setDark(isDark);
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    } catch {
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setDark(system);
+      document.documentElement.setAttribute('data-theme', system ? 'dark' : 'light');
+    }
   }, []);
 
   function toggle() {
@@ -17,7 +26,12 @@ export default function ThemeToggle() {
     setDark(next);
     const theme = next ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', theme);
-    sessionStorage.setItem('theme', theme);
+    try { sessionStorage.setItem('theme', theme); } catch { /* blocked */ }
+  }
+
+  // Render placeholder during SSR to avoid hydration mismatch
+  if (!mounted) {
+    return <button className={styles.btn} aria-label="Toggle theme" />;
   }
 
   return (
