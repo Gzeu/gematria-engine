@@ -1,0 +1,9 @@
+.list { display: flex; flex-direction: column; gap: var(--s2); }
+.lbl { font-size: var(--tx0); font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--txm); font-family: var(--fm); margin-bottom: var(--s1); }
+.item { display: flex; align-items: center; justify-content: space-between; padding: var(--s3) var(--s4); border-radius: var(--rm); background: var(--sfo); border: 1px solid transparent; cursor: pointer; transition: all var(--tt); }
+.item:hover { background: var(--sfd); }
+.on { border-color: var(--pr) !important; background: var(--prl) !important; }
+.left { display: flex; align-items: center; gap: var(--s3); }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.name { font-size: var(--tx1); font-weight: 500; }
+.total { font-family: var(--fm); font-size: var(--tx1); font-weight: 700; color: var(--txm); min-width: 36px; text-align: right; }

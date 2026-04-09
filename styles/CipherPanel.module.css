@@ -1,0 +1,16 @@
+.panel { background: var(--sf); border-radius: var(--rx); border: 1px solid var(--br); overflow: hidden; }
+.header { padding: var(--s5) var(--s6); border-bottom: 1px solid var(--dv); display: flex; align-items: center; justify-content: space-between; gap: var(--s4); }
+.name { font-family: var(--fm); font-size: var(--tx0); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.sub { font-size: var(--tx0); color: var(--txf); font-family: var(--fm); margin-top: 2px; }
+.total { font-family: var(--fd); font-size: var(--tx5); line-height: 1; }
+.body { padding: var(--s6); display: flex; flex-direction: column; gap: var(--s6); }
+.sectionLabel { font-size: var(--tx0); font-family: var(--fm); font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--txm); margin-bottom: var(--s3); }
+.breakdown { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.lc { display: flex; flex-direction: column; align-items: center; gap: 2px; background: var(--sfo); border: 1px solid var(--br); border-radius: var(--rm); padding: var(--s3) var(--s4); min-width: 50px; transition: all var(--tt); cursor: default; }
+.lc:hover { border-color: var(--pr); background: var(--prl); }
+.lcChar { font-family: var(--fd); font-size: var(--tx3); font-weight: 700; line-height: 1; }
+.lcVal { font-family: var(--fm); font-size: var(--tx0); color: var(--txm); font-weight: 600; }
+.pills { display: flex; gap: var(--s2); flex-wrap: wrap; }
+.pill { padding: var(--s2) var(--s4); border-radius: var(--rf); font-size: var(--tx1); font-weight: 600; background: var(--sfo); border: 1px solid var(--br); font-family: var(--fm); transition: all var(--tt); }
+.pill:hover { border-color: var(--pr); color: var(--pr); }
+.pillEmpty { color: var(--txf); font-style: italic; }

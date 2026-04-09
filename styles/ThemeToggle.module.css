@@ -1,0 +1,2 @@
+.btn { width: 32px; height: 32px; border-radius: var(--rf); background: var(--sfo); border: 1px solid var(--br); display: flex; align-items: center; justify-content: center; color: var(--txm); transition: all var(--tt); }
+.btn:hover { background: var(--sfd); color: var(--tx); }

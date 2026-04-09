@@ -1,0 +1,87 @@
+/* ─── DESIGN TOKENS ─────────────────────────────────────────────────────────── */
+:root, [data-theme="light"] {
+  --bg: #f7f6f2;
+  --sf: #f9f8f5;
+  --sf2: #fbfbf9;
+  --sfo: #f0ede8;
+  --sfd: #e6e4df;
+  --dv: #dcd9d5;
+  --br: #d4d1ca;
+  --tx: #28251d;
+  --txm: #7a7974;
+  --txf: #bab9b4;
+  --pr: #7c3aed;
+  --prh: #6d28d9;
+  --prl: rgba(124,58,237,.13);
+  --a1: #7c3aed; --a2: #b07a00; --a3: #01696f;
+  --a4: #a12c7b; --a5: #da7101; --a6: #006494;
+  --r: .375rem; --rm: .5rem; --rl: .75rem; --rx: 1rem; --rf: 9999px;
+  --sh0: 0 1px 3px rgba(0,0,0,.06);
+  --sh1: 0 4px 16px rgba(0,0,0,.09);
+  --sh2: 0 12px 40px rgba(0,0,0,.13);
+  --fd: 'Instrument Serif', Georgia, serif;
+  --fb: 'Geist', 'Inter', sans-serif;
+  --fm: 'Geist Mono', 'Fira Code', monospace;
+  --tx0: clamp(.75rem,.7rem + .25vw,.875rem);
+  --tx1: clamp(.875rem,.8rem + .35vw,1rem);
+  --tx2: clamp(1rem,.95rem + .25vw,1.125rem);
+  --tx3: clamp(1.125rem,1rem + .75vw,1.5rem);
+  --tx4: clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
+  --tx5: clamp(2rem,1.2rem + 2.5vw,3.5rem);
+  --s1:.25rem;--s2:.5rem;--s3:.75rem;--s4:1rem;--s5:1.25rem;--s6:1.5rem;
+  --s8:2rem;--s10:2.5rem;--s12:3rem;--s16:4rem;
+  --tt: 180ms cubic-bezier(.16,1,.3,1);
+}
+
+[data-theme="dark"] {
+  --bg: #0d0b13; --sf: #12101a; --sf2: #171520;
+  --sfo: #1c1928; --sfd: #232030;
+  --dv: #282534; --br: #2e2b3d;
+  --tx: #eae8f2; --txm: #7c7a91; --txf: #3e3b52;
+  --pr: #a78bfa; --prh: #c4b5fd; --prl: rgba(167,139,250,.16);
+  --a1: #a78bfa; --a2: #e8af34; --a3: #4f98a3;
+  --a4: #d163a7; --a5: #fdab43; --a6: #5591c7;
+  --sh0: 0 1px 3px rgba(0,0,0,.35);
+  --sh1: 0 4px 16px rgba(0,0,0,.5);
+  --sh2: 0 12px 40px rgba(0,0,0,.65);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #0d0b13; --sf: #12101a; --sf2: #171520;
+    --sfo: #1c1928; --sfd: #232030;
+    --dv: #282534; --br: #2e2b3d;
+    --tx: #eae8f2; --txm: #7c7a91; --txf: #3e3b52;
+    --pr: #a78bfa; --prh: #c4b5fd; --prl: rgba(167,139,250,.16);
+    --a1: #a78bfa; --a2: #e8af34; --a3: #4f98a3;
+    --a4: #d163a7; --a5: #fdab43; --a6: #5591c7;
+  }
+}
+
+/* ─── BASE ───────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body {
+  font-family: var(--fb);
+  font-size: var(--tx2);
+  color: var(--tx);
+  background: var(--bg);
+  line-height: 1.6;
+  min-height: 100dvh;
+  transition: background var(--tt), color var(--tt);
+}
+button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
+input, textarea, select { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; max-width: 100%; }
+:focus-visible { outline: 2px solid var(--pr); outline-offset: 3px; border-radius: var(--r); }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--br); border-radius: 3px; }
+::selection { background: var(--prl); }
+
+/* ─── UTILITIES ──────────────────────────────────────────────────────────────── */
+.sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0; }
+.mono { font-family: var(--fm); }
+.muted { color: var(--txm); }
+.faint { color: var(--txf); }

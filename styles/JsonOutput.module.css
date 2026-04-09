@@ -1,0 +1,9 @@
+.box { background: var(--bg); border-radius: var(--rl); border: 1px solid var(--br); overflow: hidden; }
+.top { display: flex; align-items: center; justify-content: space-between; padding: var(--s3) var(--s5); border-bottom: 1px solid var(--dv); }
+.lbl { font-size: var(--tx0); font-family: var(--fm); font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--txm); }
+.cpBtn { font-size: var(--tx0); font-family: var(--fm); font-weight: 700; padding: 3px var(--s3); border-radius: var(--r); background: var(--sfo); border: 1px solid var(--br); color: var(--txm); transition: all var(--tt); letter-spacing: .05em; text-transform: uppercase; cursor: pointer; }
+.cpBtn:hover { background: var(--sfd); color: var(--tx); }
+.ok { background: var(--prl) !important; color: var(--pr) !important; border-color: var(--pr) !important; }
+.pre { padding: var(--s5); overflow-x: auto; font-family: var(--fm); font-size: var(--tx0); line-height: 1.9; color: var(--txm); white-space: pre; }
+:global(.jk) { color: #a78bfa; } :global(.js) { color: #e8af34; } :global(.jn) { color: #4f98a3; }
+[data-theme="light"] :global(.jk) { color: #6d28d9; } [data-theme="light"] :global(.js) { color: #b07a00; } [data-theme="light"] :global(.jn) { color: #01696f; }

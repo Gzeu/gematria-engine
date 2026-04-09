@@ -1,0 +1,3 @@
+.logo { display: flex; align-items: center; gap: var(--s3); }
+.name { font-family: var(--fd); font-size: var(--tx3); line-height: 1; letter-spacing: -.01em; }
+.ver { font-size: var(--tx0); color: var(--txm); font-family: var(--fm); }
