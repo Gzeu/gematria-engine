@@ -23,6 +23,7 @@ const HomePage: NextPage = () => {
   const [word, setWord]               = useState('');
   const [result, setResult]           = useState<GematriaResponse | null>(null);
   const [loading, setLoading]         = useState(false);
+  const [error, setError]             = useState<string | null>(null);
   const [activeCipher, setActiveCipher] = useState<CipherKey>('english_ordinal');
   const [activeTab, setActiveTab]     = useState<Tab>('breakdown');
   const [history, setHistory]         = useState<string[]>([]);
@@ -32,17 +33,25 @@ const HomePage: NextPage = () => {
     const q = (w ?? word).trim();
     if (!q) return;
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch('/api/gematria', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ word: q }),
+        body: JSON.stringify({ input: q }),  // ✔ matches API req.body.input
       });
-      const data: GematriaResponse = await res.json();
-      setResult(data);
+      const data = await res.json();
+      if (!res.ok || 'error' in data) {
+        setError((data as any).error ?? `API error ${res.status}`);
+        return;
+      }
+      setResult(data as GematriaResponse);
       setHistory(h => [...new Set([...h.filter(x => x !== q), q])].slice(-12));
-    } catch { /* silent */ }
-    setLoading(false);
+    } catch (e: any) {
+      setError(e.message ?? 'Network error');
+    } finally {
+      setLoading(false);
+    }
   }, [word]);
 
   const handleKey = (e: React.KeyboardEvent) => {
@@ -163,6 +172,22 @@ const HomePage: NextPage = () => {
                   </span>
                 )}
               </div>
+
+              {/* Error display */}
+              {error && (
+                <div style={{
+                  marginTop: 'var(--s3)',
+                  padding: 'var(--s3) var(--s4)',
+                  background: 'color-mix(in oklab, var(--er) 10%, transparent)',
+                  border: '1px solid color-mix(in oklab, var(--er) 30%, transparent)',
+                  borderRadius: 'var(--r2)',
+                  color: 'var(--er)',
+                  fontSize: 'var(--tx1)',
+                }}>
+                  ⚠ {error}
+                </div>
+              )}
+
               <SearchHistory
                 history={history}
                 onSelect={w => { setWord(w); analyze(w); }}
