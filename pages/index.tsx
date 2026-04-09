@@ -1,145 +1,228 @@
+import React, { useState, useRef, useCallback } from 'react';
+import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useState } from 'react';
-import { useGematria } from '@/hooks/useGematria';
-import { CIPHER_DEFS, CipherKey } from '@/lib/gematria-engine';
-import CipherPanel from '@/components/CipherPanel';
-import CipherSidebar from '@/components/CipherSidebar';
-import NumerologyCard from '@/components/NumerologyCard';
-import ThemeToggle from '@/components/ThemeToggle';
-import JsonOutput from '@/components/JsonOutput';
-import Logo from '@/components/Logo';
-import styles from '@/styles/Home.module.css';
+import Logo from '../components/Logo';
+import ThemeToggle from '../components/ThemeToggle';
+import CipherSidebar from '../components/CipherSidebar';
+import CipherPanel from '../components/CipherPanel';
+import NumerologyCard from '../components/NumerologyCard';
+import JsonOutput from '../components/JsonOutput';
+import LetterGrid from '../components/LetterGrid';
+import RadarChart from '../components/RadarChart';
+import BarChart from '../components/BarChart';
+import SearchHistory from '../components/SearchHistory';
+import GlyphMatrix from '../components/GlyphMatrix';
+import s from '../styles/Home.module.css';
 
-export default function Home() {
-  const { data, loading, error, analyze } = useGematria();
-  const [input, setInput] = useState('');
-  const [active, setActive] = useState<CipherKey>('english_ordinal');
+const CIPHER_COLORS: Record<string, string> = {
+  ordinal: 'var(--a1)', pythagorean: 'var(--a2)', reverse: 'var(--a3)',
+  sumerian: 'var(--a4)', chaldean: 'var(--a5)', hebrew: 'var(--a6)',
+};
 
-  function handleAnalyze() {
-    if (input.trim()) analyze(input.trim());
-  }
+const CIPHER_LABELS: Record<string, string> = {
+  ordinal: 'Ordinal', pythagorean: 'Pythagorean', reverse: 'Reverse',
+  sumerian: 'Sumerian', chaldean: 'Chaldean', hebrew: 'Hebrew',
+};
 
-  function handleKey(e: React.KeyboardEvent) {
-    if (e.key === 'Enter') handleAnalyze();
-  }
+type Tab = 'breakdown' | 'grid' | 'glyph' | 'json';
 
-  const activeCipher = data?.ciphers[active];
-  const activeDef = CIPHER_DEFS.find(d => d.key === active)!;
+const HomePage: NextPage = () => {
+  const [word, setWord]           = useState('');
+  const [result, setResult]       = useState<any>(null);
+  const [loading, setLoading]     = useState(false);
+  const [activeCipher, setActiveCipher] = useState('ordinal');
+  const [activeTab, setActiveTab] = useState<Tab>('breakdown');
+  const [history, setHistory]     = useState<string[]>([]);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const analyze = useCallback(async (w?: string) => {
+    const q = (w ?? word).trim();
+    if (!q) return;
+    setLoading(true);
+    try {
+      const res = await fetch('/api/gematria', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ word: q }),
+      });
+      const data = await res.json();
+      setResult(data);
+      setHistory(h => [...new Set([...h.filter(x => x !== q), q])].slice(-12));
+    } catch {}
+    setLoading(false);
+  }, [word]);
+
+  const handleKey = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); analyze(); }
+  };
+
+  const cipherData = result?.ciphers?.[activeCipher];
+  const letters    = result?.original_input
+    ? result.original_input.toUpperCase().replace(/[^A-Z]/g,'').split('')
+    : [];
+
+  const radarData = result
+    ? Object.entries(result.ciphers ?? {}).map(([k, v]: any) => ({
+        label: k.substring(0,3).toUpperCase(),
+        value: v.total ?? 0,
+        color: CIPHER_COLORS[k] ?? 'var(--pr)',
+      }))
+    : [];
+
+  const barData = result
+    ? Object.entries(result.ciphers ?? {}).map(([k, v]: any) => ({
+        label: CIPHER_LABELS[k] ?? k,
+        value: v.total ?? 0,
+        color: CIPHER_COLORS[k] ?? 'var(--pr)',
+      }))
+    : [];
 
   return (
     <>
-      <Head><title>Gematria Engine</title></Head>
-      <div className={styles.app}>
+      <Head>
+        <title>Gematria Engine</title>
+        <meta name="description" content="Advanced gematria analysis — 6 ciphers, visualizations, numerology" />
+      </Head>
 
-        {/* ── SIDEBAR ── */}
-        <aside className={styles.sb}>
-          <div className={styles.sbTop}>
-            <Logo />
+      <div className={s.shell}>
+        {/* HEADER */}
+        <header className={s.header}>
+          <Logo />
+          <nav className={s.headerNav}>
+            <Link href="/" className={`${s.navLink} ${s.navLinkActive}`}>Analyze</Link>
+            <Link href="/compare" className={s.navLink}>Compare</Link>
             <ThemeToggle />
-          </div>
+          </nav>
+        </header>
 
-          <div className={styles.inputGroup}>
-            <label className={styles.lbl} htmlFor="wi">Word / Phrase</label>
-            <input
-              id="wi"
-              className={styles.inp}
-              type="text"
-              placeholder="Type anything…"
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={handleKey}
-              autoComplete="off"
-              spellCheck={false}
-            />
-            <button className={styles.abtn} onClick={handleAnalyze} disabled={loading}>
-              {loading ? 'Analyzing…' : 'Analyze'}
-            </button>
-          </div>
-
-          {data && (
-            <>
-              <CipherSidebar
-                data={data}
-                active={active}
-                onSelect={setActive}
-              />
-              <NumerologyCard
-                baseNumber={data.base_number}
-                summary={data.numerology_summary}
-              />
-            </>
-          )}
-
-          {error && <p className={styles.err}>{error}</p>}
-
-          <div className={styles.sbFooter}>
-            <Link href="/compare" className={styles.cmpLink}>⇄ Compare two words</Link>
-          </div>
-        </aside>
-
-        {/* ── MAIN ── */}
-        <main className={styles.mn}>
-          {!data ? (
-            <div className={styles.hero}>
-              <div className={styles.heroGlyph}>אΩ</div>
-              <h1 className={styles.heroTitle}>Cryptolinguistic Analysis</h1>
-              <p className={styles.heroSub}>
-                Enter any word, name, or phrase to reveal its numerical signature
-                across 6 ancient and modern Gematria ciphers.
-              </p>
-              <div className={styles.heroCiphers}>
-                {CIPHER_DEFS.map(d => (
-                  <span key={d.key} className={styles.heroPill} style={{ borderColor: d.color, color: d.color }}>
-                    {d.name}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className={styles.results}>
-              <div className={styles.rHeader}>
-                <span className={styles.rWord}>{data.original_input}</span>
-                <span className={styles.rMeta} style={{ fontFamily: 'var(--fm)' }}>
-                  {data.original_input.replace(/[^a-zA-Z]/g, '').length} letters · 6 ciphers
-                </span>
-              </div>
-
-              {activeCipher && (
-                <CipherPanel
-                  key={active}
-                  def={activeDef}
-                  cipher={activeCipher}
+        <div className={s.body}>
+          {/* SIDEBAR */}
+          <aside className={s.sidebar}>
+            {result && (
+              <>
+                <CipherSidebar
+                  ciphers={result.ciphers}
+                  active={activeCipher}
+                  onSelect={setActiveCipher}
                 />
-              )}
-
-              <div className={styles.allCiphers}>
-                <div className={styles.sectionLabel}>All Cipher Totals</div>
-                {CIPHER_DEFS.map(d => (
-                  <div
-                    key={d.key}
-                    className={`${styles.cr} ${d.key === active ? styles.crActive : ''}`}
-                    onClick={() => setActive(d.key)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={e => e.key === 'Enter' && setActive(d.key)}
-                  >
-                    <div>
-                      <div className={styles.crName}>{d.name}</div>
-                      <div className={styles.crSub}>{d.sub}</div>
-                    </div>
-                    <div className={styles.crVal} style={{ color: d.color }}>
-                      {data.ciphers[d.key].total}
-                    </div>
-                  </div>
-                ))}
+                <div style={{ marginTop: 'var(--s4)' }}>
+                  <NumerologyCard summary={result.numerology_summary} />
+                </div>
+                {/* Radar */}
+                <div className={s.card} style={{ padding: 'var(--s4)' }}>
+                  <div className={s.cardTitle}>Cipher Radar</div>
+                  <RadarChart ciphers={radarData} size={220} />
+                </div>
+              </>
+            )}
+            {!result && (
+              <div style={{ padding: 'var(--s4)', color: 'var(--txf)', fontSize: 'var(--tx1)', lineHeight: 1.7, fontFamily: 'var(--fd)', fontStyle: 'italic' }}>
+                Enter any word or phrase to decode its gematric signature across 6 ancient cipher systems.
               </div>
+            )}
+          </aside>
 
-              <JsonOutput data={data} />
+          {/* MAIN */}
+          <main className={s.main}>
+            {/* INPUT */}
+            <div className={s.card}>
+              <div className={s.heroWrap}>
+                <textarea
+                  ref={inputRef}
+                  className={s.heroInput}
+                  rows={1}
+                  value={word}
+                  onChange={e => setWord(e.target.value)}
+                  onKeyDown={handleKey}
+                  placeholder="Type a word…"
+                  aria-label="Word or phrase to analyze"
+                  spellCheck={false}
+                  style={{ minHeight: '60px' }}
+                />
+                <div className={s.heroUnderline} style={{ transform: word ? 'scaleX(1)' : 'scaleX(0)' }} />
+              </div>
+              <div className={s.heroMeta}>
+                <button
+                  className={s.analyzeBtn}
+                  onClick={() => analyze()}
+                  disabled={loading || !word.trim()}
+                >
+                  {loading ? '…' : '⬡ Analyze'}
+                </button>
+                {word && (
+                  <span className={s.heroCount}>
+                    {word.replace(/[^A-Za-z]/g,'').length} letters
+                  </span>
+                )}
+              </div>
+              <SearchHistory
+                history={history}
+                onSelect={w => { setWord(w); analyze(w); }}
+                onClear={() => setHistory([])}
+              />
             </div>
-          )}
-        </main>
+
+            {/* RESULTS */}
+            {result && (
+              <>
+                {/* Bar overview */}
+                <div className={s.card}>
+                  <div className={s.cardTitle}>All Ciphers</div>
+                  <BarChart bars={barData} />
+                </div>
+
+                {/* Active cipher detail */}
+                {cipherData && (
+                  <div className={s.card}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--s4)', flexWrap: 'wrap', gap: 'var(--s3)' }}>
+                      <div className={s.cardTitle} style={{ marginBottom: 0 }}>
+                        {CIPHER_LABELS[activeCipher] ?? activeCipher}
+                      </div>
+                      <div className={s.totalBadge}>
+                        <span className={s.totalNum}>{cipherData.total}</span>
+                        <span className={s.totalLabel}>total</span>
+                      </div>
+                    </div>
+
+                    {/* Tabs */}
+                    <div className={s.tabs} style={{ marginBottom: 'var(--s5)' }}>
+                      {(['breakdown','grid','glyph','json'] as Tab[]).map(t => (
+                        <button
+                          key={t}
+                          className={`${s.tab} ${activeTab === t ? s.tabActive : ''}`}
+                          onClick={() => setActiveTab(t)}
+                        >
+                          {t === 'breakdown' ? '⊞ Table' : t === 'grid' ? '▦ Grid' : t === 'glyph' ? 'ℵ Glyph' : '{ } JSON'}
+                        </button>
+                      ))}
+                    </div>
+
+                    {activeTab === 'breakdown' && (
+                      <CipherPanel cipher={activeCipher} data={cipherData} />
+                    )}
+                    {activeTab === 'grid' && (
+                      <LetterGrid
+                        letters={letters}
+                        values={cipherData.breakdown}
+                        accentVar={`--${['a1','a2','a3','a4','a5','a6'][Object.keys(result.ciphers).indexOf(activeCipher)] ?? 'pr'}`}
+                      />
+                    )}
+                    {activeTab === 'glyph' && (
+                      <GlyphMatrix word={result.original_input} cipher={cipherData.breakdown} />
+                    )}
+                    {activeTab === 'json' && (
+                      <JsonOutput data={result} />
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+          </main>
+        </div>
       </div>
     </>
   );
-}
+};
+
+export default HomePage;

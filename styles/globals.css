@@ -85,3 +85,125 @@ img, svg { display: block; max-width: 100%; }
 .mono { font-family: var(--fm); }
 .muted { color: var(--txm); }
 .faint { color: var(--txf); }
+
+/* ─── JSON SYNTAX HIGHLIGHT (global — used by JsonOutput via dangerouslySetInnerHTML) ── */
+.jk { color: #6d28d9; }
+.js { color: #b07a00; }
+.jn { color: #01696f; }
+.jb { color: #a12c7b; }
+[data-theme="dark"] .jk { color: #a78bfa; }
+[data-theme="dark"] .js { color: #e8af34; }
+[data-theme="dark"] .jn { color: #4f98a3; }
+[data-theme="dark"] .jb { color: #d163a7; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .jk { color: #a78bfa; }
+  :root:not([data-theme]) .js { color: #e8af34; }
+  :root:not([data-theme]) .jn { color: #4f98a3; }
+  :root:not([data-theme]) .jb { color: #d163a7; }
+}
+
+/* ─── ANIMATIONS ─────────────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(1);   opacity: .7; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.anim-fadeUp { animation: fadeUp .4s cubic-bezier(.16,1,.3,1) both; }
+.anim-float  { animation: float 4s ease-in-out infinite; }
+
+/* ─── GLOW EFFECTS ───────────────────────────────────────────────────────────── */
+.glow-pr { box-shadow: 0 0 20px rgba(167,139,250,.25), 0 0 60px rgba(167,139,250,.08); }
+.glow-a3 { box-shadow: 0 0 20px rgba(79,152,163,.25), 0 0 60px rgba(79,152,163,.08); }
+
+/* ─── GRID VISUALIZATION ─────────────────────────────────────────────────────── */
+.vizGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+  gap: var(--s2);
+}
+.vizCell {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--rm);
+  border: 1px solid var(--br);
+  background: var(--sf);
+  transition: all var(--tt);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+.vizCell:hover { transform: translateY(-2px); box-shadow: var(--sh1); }
+.vizCell .letter {
+  font-family: var(--fd);
+  font-size: var(--tx3);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--tx);
+}
+.vizCell .val {
+  font-family: var(--fm);
+  font-size: var(--tx0);
+  color: var(--txm);
+  line-height: 1;
+  margin-top: 3px;
+}
+.vizCell .bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--pr);
+  border-radius: 0 0 var(--rm) var(--rm);
+  transition: width .6s cubic-bezier(.16,1,.3,1);
+}
+
+/* ─── RADAR / SPIDER CHART PLACEHOLDER ──────────────────────────────────────── */
+.radarWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* ─── NUMBER COUNTER ANIMATION ───────────────────────────────────────────────── */
+.countUp {
+  font-variant-numeric: tabular-nums;
+  transition: color .3s var(--tt);
+}
+
+/* ─── HISTORY PILL ───────────────────────────────────────────────────────────── */
+.histPill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s1) var(--s3);
+  border-radius: var(--rf);
+  border: 1px solid var(--br);
+  background: var(--sfo);
+  font-size: var(--tx0);
+  font-family: var(--fm);
+  color: var(--txm);
+  cursor: pointer;
+  transition: all var(--tt);
+  white-space: nowrap;
+}
+.histPill:hover { background: var(--prl); color: var(--pr); border-color: var(--pr); }
