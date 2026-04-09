@@ -1,5 +1,32 @@
-.card { background: var(--sfo); border-radius: var(--rl); padding: var(--s5); border: 1px solid var(--br); }
-.lbl { font-size: var(--tx0); font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--txm); font-family: var(--fm); margin-bottom: var(--s3); }
-.number { font-family: var(--fd); font-size: var(--tx5); color: var(--pr); line-height: 1; margin-bottom: var(--s2); display: flex; align-items: center; gap: var(--s3); }
-.master { font-family: var(--fm); font-size: var(--tx0); background: var(--prl); color: var(--pr); border: 1px solid var(--pr); border-radius: var(--rf); padding: 2px var(--s3); letter-spacing: .06em; text-transform: uppercase; font-weight: 700; }
-.meaning { font-size: var(--tx1); color: var(--txm); line-height: 1.7; }
+.card {
+  background: linear-gradient(135deg,
+    color-mix(in oklch, var(--pr) 6%, var(--sf)),
+    color-mix(in oklch, var(--a3) 4%, var(--sf)));
+  border: 1px solid color-mix(in oklch, var(--pr) 20%, var(--br));
+  border-radius: var(--rl);
+  padding: var(--s4);
+  animation: fadeUp .4s .1s cubic-bezier(.16,1,.3,1) both;
+}
+.header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--s3);
+}
+.label {
+  font-size: var(--tx0); font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--txf);
+}
+.badge {
+  font-family: var(--fm); font-size: var(--tx4); font-weight: 900;
+  color: var(--pr); line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.master {
+  color: var(--a2) !important;
+  text-shadow: 0 0 20px color-mix(in oklch, var(--a2) 50%, transparent);
+}
+.text {
+  font-size: var(--tx1); color: var(--txm);
+  line-height: 1.65;
+}
