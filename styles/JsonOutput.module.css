@@ -1,10 +1,8 @@
-.wrap {
-  background:rgba(7,6,13,0.7);
-  border:1px solid rgba(255,255,255,0.06);
-  border-radius:var(--r2);
-  padding:var(--s4) var(--s5);
-  overflow-x:auto; max-height:480px; scrollbar-width:thin;
-  font-family:var(--fm); font-size:var(--t1); line-height:1.75;
-  color:var(--ctm);
+/* JsonOutput — Ink & Parchment v2 */
+.pre {
+  font-family:var(--fm); font-size:var(--t1);
+  color:var(--ctm); line-height:1.7;
+  background:var(--c1); border:1px solid var(--bd);
+  border-radius:var(--r2); padding:var(--s4);
+  overflow:auto; max-height:400px;
 }
-.wrap pre { white-space:pre-wrap; word-break:break-all; }

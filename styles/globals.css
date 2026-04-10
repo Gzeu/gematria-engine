@@ -1,71 +1,83 @@
 /* ═══════════════════════════════════════════════════════════
-   GEMATRIA ENGINE — GLOBAL DESIGN SYSTEM
-   Fonts: Cinzel (display) + Inter (body) + JetBrains Mono (mono)
+   GEMATRIA ENGINE — DESIGN SYSTEM v2
+   Ink & Parchment — warm dark, gold accent, Cinzel display
+   Fonts: Cinzel (display) · EB Garamond (body) · JetBrains Mono (mono)
 ═══════════════════════════════════════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 /* ── TOKENS ─────────────────────────────────────────────── */
 :root {
-  /* Surfaces — deep onyx */
-  --c0:  #050407;
-  --c1:  #0a0910;
-  --c2:  #0f0e18;
-  --c3:  #151321;
-  --c4:  #1c1a2e;
-  --c5:  #252239;
-  --c6:  #2f2b47;
-  --cb:  rgba(255,255,255,0.055);
-  --cbh: rgba(255,255,255,0.10);
+  /* Surfaces — warm near-black ink */
+  --c0:  #0e0d0b;
+  --c1:  #131210;
+  --c2:  #181714;
+  --c3:  #1e1c19;
+  --c4:  #242220;
+  --c5:  #2c2a27;
+  --c6:  #353330;
+  --cb:  rgba(255,248,230,0.045);
+  --cbh: rgba(255,248,230,0.08);
 
-  /* Text */
-  --ct:  #ede8ff;
-  --ctm: #9490b8;
-  --ctf: #4d4a6a;
-  --cti: #0a0910;
+  /* Text — warm ivory */
+  --ct:  #f0ead8;
+  --ctm: #9a9180;
+  --ctf: #4a453c;
+  --cti: #0e0d0b;
 
-  /* Primary — violet */
-  --p:   #8b5cf6;
-  --ph:  #a78bfa;
-  --pa:  #c4b5fd;
-  --pl:  rgba(139,92,246,0.10);
-  --plb: rgba(139,92,246,0.18);
-  --ps:  rgba(139,92,246,0.30);
+  /* Primary — antique gold */
+  --p:   #c9a84c;
+  --ph:  #e0bf6e;
+  --pa:  #f0d898;
+  --pl:  rgba(201,168,76,0.10);
+  --plb: rgba(201,168,76,0.18);
+  --ps:  rgba(201,168,76,0.30);
 
-  /* Accent — teal */
-  --g:   #2dd4bf;
-  --gh:  rgba(45,212,191,0.12);
-  --ga:  #99f6e4;
+  /* Accent — sienna red */
+  --g:   #b85c38;
+  --gh:  rgba(184,92,56,0.12);
+  --ga:  #e8a080;
 
-  /* Danger/highlight */
-  --pk:  #f43f8e;
-  --pkh: rgba(244,63,142,0.12);
-  --am:  #f59e0b;
-  --amh: rgba(245,158,11,0.12);
+  /* Secondary accent — muted teal (for compare B) */
+  --tl:  #4a8f8c;
+  --tlh: rgba(74,143,140,0.12);
+  --tla: #8ecece;
+
+  /* Error */
+  --pk:  #c0392b;
+  --pkh: rgba(192,57,43,0.12);
+
+  /* Warning */
+  --am:  #c9a84c;
+  --amh: rgba(201,168,76,0.12);
+
+  /* Borders */
+  --bd:  rgba(255,248,230,0.07);
+  --bdh: rgba(255,248,230,0.13);
 
   /* Radius */
-  --r1: 4px;
-  --r2: 8px;
-  --r3: 12px;
-  --r4: 16px;
-  --r5: 24px;
+  --r1: 3px;
+  --r2: 6px;
+  --r3: 10px;
+  --r4: 14px;
+  --r5: 20px;
   --rF: 9999px;
 
-  /* Shadows */
-  --sh1: 0 1px 3px rgba(0,0,0,0.5);
-  --sh2: 0 4px 16px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.4);
-  --sh3: 0 16px 48px rgba(0,0,0,0.7), 0 4px 12px rgba(0,0,0,0.5);
-  --shp: 0 0 0 1px rgba(139,92,246,0.25), 0 4px 20px rgba(139,92,246,0.15);
-  --shg: 0 0 0 1px rgba(45,212,191,0.2), 0 4px 16px rgba(45,212,191,0.10);
+  /* Shadows — warm-toned */
+  --sh1: 0 1px 3px rgba(0,0,0,0.55);
+  --sh2: 0 4px 18px rgba(0,0,0,0.65), 0 1px 4px rgba(0,0,0,0.4);
+  --sh3: 0 16px 48px rgba(0,0,0,0.75), 0 4px 14px rgba(0,0,0,0.5);
+  --shp: 0 0 0 1px rgba(201,168,76,0.22), 0 4px 20px rgba(201,168,76,0.12);
+  --shg: 0 0 0 1px rgba(74,143,140,0.18), 0 4px 14px rgba(74,143,140,0.08);
 
   /* Fonts */
   --fd: 'Cinzel', 'Georgia', serif;
-  --fb: 'Inter', system-ui, sans-serif;
+  --fb: 'EB Garamond', 'Georgia', serif;
   --fm: 'JetBrains Mono', 'Consolas', monospace;
 
   /* Type scale */
   --t1: clamp(0.6875rem, 0.65rem + 0.2vw, 0.75rem);
   --t2: clamp(0.8125rem, 0.78rem + 0.18vw, 0.875rem);
-  --t3: clamp(0.9375rem, 0.9rem + 0.2vw, 1rem);
+  --t3: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
   --t4: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
   --t5: clamp(1.375rem, 1.1rem + 1.4vw, 2rem);
   --t6: clamp(2rem, 1.4rem + 3vw, 3.5rem);
@@ -76,9 +88,9 @@
 
   /* Motion */
   --ease: cubic-bezier(0.16,1,0.3,1);
-  --fast: 120ms;
-  --mid:  220ms;
-  --slow: 380ms;
+  --fast: 110ms;
+  --mid:  200ms;
+  --slow: 360ms;
 }
 
 /* ── RESET ───────────────────────────────────────────────── */
@@ -88,35 +100,26 @@ html {
   -moz-osx-font-smoothing:grayscale;
   scroll-behavior:smooth;
   text-rendering:optimizeLegibility;
+  scroll-padding-top:56px;
 }
 body {
   font-family:var(--fb);
   font-size:var(--t3);
   color:var(--ct);
   background:var(--c0);
-  line-height:1.6;
+  line-height:1.65;
   min-height:100dvh;
   overflow-x:hidden;
 }
 
-/* ── AMBIENT BACKGROUND ──────────────────────────────────── */
+/* ── SUBTLE VIGNETTE — not blobs ─────────────────────────── */
 body::before {
   content:'';
   position:fixed; inset:0; z-index:0; pointer-events:none;
   background:
-    radial-gradient(ellipse 900px 700px at -10% -5%,  rgba(139,92,246,0.13) 0%, transparent 65%),
-    radial-gradient(ellipse 700px 500px at 110% 105%, rgba(244,63,142,0.09) 0%, transparent 60%),
-    radial-gradient(ellipse 500px 400px at 60%  20%,  rgba(45,212,191,0.05) 0%, transparent 55%);
+    radial-gradient(ellipse 1200px 800px at 50% -10%, rgba(201,168,76,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 600px 400px at 0% 100%, rgba(184,92,56,0.03) 0%, transparent 60%);
 }
-
-/* ── DOT GRID ────────────────────────────────────────────── */
-body::after {
-  content:'';
-  position:fixed; inset:0; z-index:0; pointer-events:none;
-  background-image:radial-gradient(circle, rgba(255,255,255,0.028) 1px, transparent 1px);
-  background-size:28px 28px;
-}
-
 body > * { position:relative; z-index:1; }
 
 /* ── ELEMENTS ────────────────────────────────────────────── */
@@ -135,28 +138,27 @@ img, svg { display:block; max-width:100%; }
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:var(--c5); border-radius:2px; }
 ::-webkit-scrollbar-thumb:hover { background:var(--c6); }
-::selection { background:var(--pl); color:var(--pa); }
+::selection { background:rgba(201,168,76,0.18); color:var(--pa); }
 
 /* ── KEYFRAMES ───────────────────────────────────────────── */
-@keyframes fadeUp   { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeUp   { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
-@keyframes scaleIn  { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
+@keyframes scaleIn  { from{opacity:0;transform:scale(0.97)} to{opacity:1;transform:scale(1)} }
 @keyframes shimmer  { 0%{background-position:-400% 0} 100%{background-position:400% 0} }
-@keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
 @keyframes spin     { to{transform:rotate(360deg)} }
 @keyframes pulse    { 0%,100%{opacity:0.5} 50%{opacity:1} }
-@keyframes numPop   { 0%{transform:scale(0.82);opacity:0} 60%{transform:scale(1.06)} 100%{transform:scale(1);opacity:1} }
-@keyframes glowPulse { 0%,100%{box-shadow:0 0 6px rgba(139,92,246,0.2)} 50%{box-shadow:0 0 22px rgba(139,92,246,0.55)} }
+@keyframes numPop   { 0%{transform:scale(0.84);opacity:0} 60%{transform:scale(1.04)} 100%{transform:scale(1);opacity:1} }
+@keyframes barGrow  { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+@keyframes bounce   { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
+@keyframes runeGlow {
+  0%,100%{opacity:0.7;text-shadow:0 0 12px rgba(201,168,76,0.2)}
+  50%{opacity:1;text-shadow:0 0 24px rgba(201,168,76,0.5)}
+}
 @keyframes orbFloat {
-  0%,100%{transform:translateY(0) scale(1); opacity:0.7}
-  50%{transform:translateY(-10px) scale(1.04); opacity:1}
+  0%,100%{transform:translateY(0) scale(1);opacity:0.6}
+  50%{transform:translateY(-8px) scale(1.03);opacity:1}
 }
-@keyframes runeFlicker {
-  0%,100%{opacity:0.6;text-shadow:0 0 8px rgba(139,92,246,0.4)}
-  50%{opacity:1;text-shadow:0 0 18px rgba(139,92,246,0.8)}
-}
-@keyframes barGrow { from{transform:scaleX(0)} to{transform:scaleX(1)} }
-@keyframes bounce { 0%,80%,100%{transform:scale(0)} 40%{transform:scale(1)} }
 
 /* ── SKELETON ────────────────────────────────────────────── */
 .sk {
@@ -169,7 +171,7 @@ img, svg { display:block; max-width:100%; }
 /* ── DOTS LOADER ─────────────────────────────────────────── */
 .dots { display:inline-flex; gap:4px; align-items:center; }
 .dots span {
-  width:5px; height:5px; border-radius:50%;
+  width:4px; height:4px; border-radius:50%;
   background:currentColor;
   animation:bounce 1.2s ease-in-out infinite;
 }

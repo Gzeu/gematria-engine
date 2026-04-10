@@ -1,16 +1,36 @@
-.tbl { width:100%; border-collapse:collapse; font-family:var(--fm); }
-.thead th {
-  text-align:left; padding:var(--s2) var(--s3);
-  font-size:var(--t1); font-weight:700; font-family:var(--fb);
-  letter-spacing:0.08em; text-transform:uppercase;
-  color:var(--ctf); border-bottom:1px solid rgba(255,255,255,0.06);
+/* CipherPanel — Ink & Parchment v2 */
+.grid {
+  display:flex; flex-wrap:wrap; gap:var(--s2);
 }
-.row td { padding:9px var(--s3); border-bottom:1px solid rgba(255,255,255,0.04); transition:background var(--fast); }
-.row:hover td { background:var(--cb); }
-.row:last-child td { border-bottom:none; }
-.ltr { font-family:var(--fd); font-size:var(--t4); font-weight:800; color:var(--ct); width:36px; text-align:center; }
-.num { font-weight:700; color:var(--pa); font-variant-numeric:tabular-nums; }
-.pos { color:var(--ctf); width:28px; }
-.totalRow { padding:var(--s3) var(--s3); text-align:right; font-family:var(--fm); font-size:var(--t2); }
-.totalLbl { color:var(--ctm); margin-right:var(--s2); }
-.totalVal { color:var(--pa); font-weight:700; font-variant-numeric:tabular-nums; }
+.cell {
+  display:flex; flex-direction:column; align-items:center;
+  padding:var(--s3) var(--s4);
+  background:var(--c3);
+  border:1px solid var(--bd);
+  border-radius:var(--r2);
+  min-width:52px;
+  transition:all var(--mid) var(--ease);
+}
+.cell:hover { border-color:rgba(201,168,76,0.22); background:var(--c4); }
+.letter {
+  font-family:var(--fd); font-size:var(--t3); font-weight:700;
+  color:var(--pa); letter-spacing:0.04em;
+}
+.value {
+  font-family:var(--fm); font-size:var(--t2); font-weight:700;
+  color:var(--p); font-variant-numeric:tabular-nums;
+  margin-top:2px;
+}
+.total {
+  display:flex; align-items:baseline; gap:var(--s2);
+  margin-top:var(--s4); padding-top:var(--s4);
+  border-top:1px solid var(--bd);
+}
+.totalNum {
+  font-family:var(--fm); font-size:var(--t5); font-weight:700;
+  color:var(--p); font-variant-numeric:tabular-nums;
+}
+.totalLabel {
+  font-family:var(--fd); font-size:var(--t1);
+  color:var(--ctm); letter-spacing:0.08em; text-transform:uppercase;
+}

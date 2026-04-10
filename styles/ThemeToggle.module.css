@@ -1,8 +1,9 @@
+/* ThemeToggle — Ink & Parchment v2 */
 .btn {
-  width:34px; height:34px; border-radius:var(--rF);
   display:flex; align-items:center; justify-content:center;
-  color:var(--ctm); border:1px solid rgba(255,255,255,0.08);
-  background:rgba(255,255,255,0.04);
+  width:32px; height:32px; border-radius:var(--r2);
+  color:var(--ctm);
+  border:1px solid var(--bd);
   transition:all var(--mid) var(--ease);
 }
-.btn:hover { color:var(--pa); border-color:rgba(124,90,245,0.4); background:var(--pl); }
+.btn:hover { color:var(--ct); background:var(--cb); border-color:var(--bdh); }
