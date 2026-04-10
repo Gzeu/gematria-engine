@@ -1,24 +1,43 @@
-/* NumerologyCard — Ink & Parchment v2 */
+/* NumerologyCard */
 .card {
-  background:var(--c2); border:1px solid var(--bd);
-  border-radius:var(--r3); padding:var(--s4);
+  background: var(--s3);
+  border: 1px solid var(--bd);
+  border-radius: var(--r3);
+  padding: var(--sp4);
 }
-.label {
-  font-family:var(--fd); font-size:var(--t1); font-weight:700;
-  letter-spacing:0.14em; text-transform:uppercase;
-  color:var(--ctf); margin-bottom:var(--s3);
+.title {
+  font-family: var(--fd);
+  font-size: var(--t1);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--txm);
+  margin-bottom: var(--sp3);
+}
+.text {
+  font-size: var(--t2);
+  color: var(--txm);
+  line-height: 1.7;
+  font-style: italic;
 }
 .row {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:var(--s2) 0;
-  border-bottom:1px solid var(--bd);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp2) 0;
+  border-bottom: 1px solid var(--bd);
 }
-.row:last-child { border-bottom:none; }
-.key {
-  font-family:var(--fb); font-size:var(--t2);
-  color:var(--ctm); font-style:italic;
+.row:last-child { border-bottom: none; }
+.lbl {
+  font-family: var(--fb);
+  font-size: var(--t2);
+  color: var(--txm);
+  font-style: italic;
 }
 .val {
-  font-family:var(--fm); font-size:var(--t3); font-weight:700;
-  color:var(--p); font-variant-numeric:tabular-nums;
+  font-family: var(--fm);
+  font-size: var(--t3);
+  font-weight: 700;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
 }
