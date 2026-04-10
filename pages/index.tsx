@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -51,6 +51,17 @@ const HomePage: NextPage = () => {
   const radarData = result ? CIPHER_DEFS.map(d => ({ label: d.name.slice(0, 3).toUpperCase(), value: result.ciphers[d.key].total, color: d.color })) : [];
   const barData   = result ? CIPHER_DEFS.map(d => ({ label: d.name, value: result.ciphers[d.key].total, color: d.color })) : [];
   const tabLabels: Record<Tab, string> = { breakdown: 'Table', grid: 'Grid', glyph: 'Glyph', json: 'JSON' };
+
+  // Transform Record<string,number> breakdown into Entry[] for CipherPanel
+  const cdForPanel = useMemo(() => {
+    if (!cd) return null;
+    const entries = Object.entries(cd.breakdown).map(([letter, value], i) => ({
+      letter: letter.replace(/\d+$/, ''), // strip duplicate-position suffix (e.g. "A2" → "A")
+      value,
+      position: i + 1,
+    }));
+    return { breakdown: entries, total: cd.total };
+  }, [cd]);
 
   return (
     <>
@@ -137,7 +148,7 @@ const HomePage: NextPage = () => {
                 </div>
 
                 {/* CIPHER DETAIL */}
-                {cd && (
+                {cd && cdForPanel && (
                   <div className={s.panel}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--sp5)', flexWrap: 'wrap', gap: 'var(--sp3)' }}>
                       <div className={s.panelLabel} style={{ marginBottom: 0 }}>
@@ -155,7 +166,7 @@ const HomePage: NextPage = () => {
                         </button>
                       ))}
                     </div>
-                    {tab === 'breakdown' && <CipherPanel cipher={cipher} data={cd} />}
+                    {tab === 'breakdown' && <CipherPanel cipher={cipher} data={cdForPanel} />}
                     {tab === 'grid' && <LetterGrid letters={letters} values={cd.breakdown} accentVar={`--cc${CIPHER_DEFS.findIndex(d => d.key === cipher) + 1}`} />}
                     {tab === 'glyph' && <GlyphMatrix word={result.original_input} cipher={cd.breakdown} />}
                     {tab === 'json' && <JsonOutput data={result} />}
