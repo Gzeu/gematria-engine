@@ -19,13 +19,13 @@ import s from '../styles/Home.module.css';
 type Tab = 'breakdown' | 'grid' | 'glyph' | 'json';
 
 const HomePage: NextPage = () => {
-  const [word, setWord]             = useState('');
-  const [result, setResult]         = useState<GematriaResponse | null>(null);
-  const [loading, setLoading]       = useState(false);
-  const [error, setError]           = useState<string | null>(null);
-  const [cipher, setCipher]         = useState<CipherKey>('english_ordinal');
-  const [tab, setTab]               = useState<Tab>('breakdown');
-  const [history, setHistory]       = useState<string[]>([]);
+  const [word, setWord]         = useState('');
+  const [result, setResult]     = useState<GematriaResponse | null>(null);
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState<string | null>(null);
+  const [cipher, setCipher]     = useState<CipherKey>('english_ordinal');
+  const [tab, setTab]           = useState<Tab>('breakdown');
+  const [history, setHistory]   = useState<string[]>([]);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const analyze = useCallback(async (w?: string) => {
@@ -33,22 +33,24 @@ const HomePage: NextPage = () => {
     if (!q) return;
     setLoading(true); setError(null);
     try {
-      const res  = await fetch('/api/gematria', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({input:q}) });
+      const res  = await fetch('/api/gematria', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ input: q }) });
       const data = await res.json();
       if (!res.ok || 'error' in data) { setError((data as any).error ?? `Error ${res.status}`); return; }
       setResult(data as GematriaResponse);
-      setHistory(h => [...new Set([q, ...h.filter(x => x !== q)])].slice(0,12));
-    } catch(e:any) { setError(e.message ?? 'Network error'); }
+      setHistory(h => [...new Set([q, ...h.filter(x => x !== q)])].slice(0, 12));
+    } catch (e: any) { setError(e.message ?? 'Network error'); }
     finally { setLoading(false); }
   }, [word]);
 
-  const onKey = (e: React.KeyboardEvent) => { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); analyze(); } };
+  const onKey = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); analyze(); }
+  };
 
   const cd = result?.ciphers?.[cipher];
-  const letters = result ? result.original_input.toUpperCase().replace(/[^A-Z]/g,'').split('') : [];
-  const radarData = result ? CIPHER_DEFS.map(d=>({label:d.name.slice(0,3).toUpperCase(),value:result.ciphers[d.key].total,color:d.color})) : [];
-  const barData   = result ? CIPHER_DEFS.map(d=>({label:d.name,value:result.ciphers[d.key].total,color:d.color})) : [];
-  const tabLabels: Record<Tab,string> = { breakdown:'Table', grid:'Grid', glyph:'Glyph', json:'JSON' };
+  const letters = result ? result.original_input.toUpperCase().replace(/[^A-Z]/g, '').split('') : [];
+  const radarData = result ? CIPHER_DEFS.map(d => ({ label: d.name.slice(0, 3).toUpperCase(), value: result.ciphers[d.key].total, color: d.color })) : [];
+  const barData   = result ? CIPHER_DEFS.map(d => ({ label: d.name, value: result.ciphers[d.key].total, color: d.color })) : [];
+  const tabLabels: Record<Tab, string> = { breakdown: 'Table', grid: 'Grid', glyph: 'Glyph', json: 'JSON' };
 
   return (
     <>
@@ -65,7 +67,7 @@ const HomePage: NextPage = () => {
               <span className={s.logoMark}>ℵ</span>
               <span className={s.logoText}>Gematria</span>
             </Link>
-            <nav style={{display:'flex',gap:'var(--s1)',marginLeft:'var(--s4)'}}>
+            <nav className={s.nav}>
               <Link href="/" className={`${s.navLink} ${s.navActive}`}>Analyze</Link>
               <Link href="/compare" className={s.navLink}>Compare</Link>
             </nav>
@@ -76,21 +78,20 @@ const HomePage: NextPage = () => {
         </header>
 
         <div className={s.body}>
+
           {/* SIDEBAR */}
           <aside className={s.side}>
             {result ? (
               <>
                 <CipherSidebar data={result} active={cipher} onSelect={setCipher} />
-                <div style={{marginTop:'var(--s3)'}}>
-                  <NumerologyCard summary={result.numerology_summary} />
-                </div>
-                <div style={{marginTop:'var(--s3)',background:'rgba(20,18,40,0.6)',border:'1px solid rgba(255,255,255,0.07)',borderRadius:'var(--r3)',padding:'var(--s4)'}}>
-                  <div className={s.panelLabel} style={{marginBottom:'var(--s4)'}}>Cipher Radar</div>
+                <NumerologyCard summary={result.numerology_summary} />
+                <div style={{ background: 'var(--s3)', border: '1px solid var(--bd)', borderRadius: 'var(--r3)', padding: 'var(--sp4)' }}>
+                  <div className={s.panelLabel}>Cipher Radar</div>
                   <RadarChart ciphers={radarData} size={200} />
                 </div>
               </>
             ) : (
-              <div style={{padding:'var(--s4) var(--s2)',color:'var(--ctm)',fontSize:'var(--t2)',lineHeight:1.7,fontStyle:'italic'}}>
+              <div style={{ padding: 'var(--sp4)', color: 'var(--txm)', fontSize: 'var(--t2)', lineHeight: 1.8, fontStyle: 'italic' }}>
                 Enter any word or phrase to decode its gematric signature across 6 ancient cipher systems.
               </div>
             )}
@@ -98,7 +99,8 @@ const HomePage: NextPage = () => {
 
           {/* MAIN */}
           <main className={s.main}>
-            {/* INPUT */}
+
+            {/* INPUT PANEL */}
             <div className={s.panel}>
               <div className={s.inputWrap}>
                 <textarea
@@ -108,25 +110,27 @@ const HomePage: NextPage = () => {
                   value={word}
                   onChange={e => setWord(e.target.value)}
                   onKeyDown={onKey}
-                  placeholder="Type a word…"
+                  placeholder="Type a word or phrase…"
                   aria-label="Word or phrase to analyze"
                   spellCheck={false}
                 />
-                <div className={s.inputLine} style={{transform:word?'scaleX(1)':'scaleX(0)'}} />
+                <div className={s.inputLine} style={{ transform: word ? 'scaleX(1)' : 'scaleX(0)' }} />
               </div>
               <div className={s.inputMeta}>
-                <button className={s.btn} onClick={()=>analyze()} disabled={loading||!word.trim()}>
-                  {loading ? <span className="dots"><span/><span/><span/></span> : 'Analyze'}
+                <button className={s.btn} onClick={() => analyze()} disabled={loading || !word.trim()}>
+                  {loading ? <span className="dots"><span /><span /><span /></span> : 'Analyze'}
                 </button>
-                {word && <span className={s.letterCount}>{word.replace(/[^A-Za-z]/g,'').length} letters</span>}
+                {word && (
+                  <span className={s.letterCount}>{word.replace(/[^A-Za-z]/g, '').length} letters</span>
+                )}
               </div>
               {error && <div className={s.err}>⚠ {error}</div>}
-              <SearchHistory history={history} onSelect={w=>{setWord(w);analyze(w);}} onClear={()=>setHistory([])} />
+              <SearchHistory history={history} onSelect={w => { setWord(w); analyze(w); }} onClear={() => setHistory([])} />
             </div>
 
             {result ? (
               <>
-                {/* BAR CHART */}
+                {/* BAR CHART OVERVIEW */}
                 <div className={s.panel}>
                   <div className={s.panelLabel}>All Ciphers</div>
                   <BarChart bars={barData} />
@@ -135,24 +139,26 @@ const HomePage: NextPage = () => {
                 {/* CIPHER DETAIL */}
                 {cd && (
                   <div className={s.panel}>
-                    <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'var(--s5)',flexWrap:'wrap',gap:'var(--s3)'}}>
-                      <div className={s.panelLabel} style={{marginBottom:0}}>
-                        {CIPHER_DEFS.find(d=>d.key===cipher)?.name ?? cipher}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--sp5)', flexWrap: 'wrap', gap: 'var(--sp3)' }}>
+                      <div className={s.panelLabel} style={{ marginBottom: 0 }}>
+                        {CIPHER_DEFS.find(d => d.key === cipher)?.name ?? cipher}
                       </div>
                       <div className={s.valBadge}>
                         <span className={s.valNum}>{cd.total}</span>
                         <span className={s.valLabel}>total</span>
                       </div>
                     </div>
-                    <div className={s.tabs} style={{marginBottom:'var(--s5)'}}>
-                      {(['breakdown','grid','glyph','json'] as Tab[]).map(t=>(
-                        <button key={t} className={`${s.tab} ${tab===t?s.tabOn:''}`} onClick={()=>setTab(t)}>{tabLabels[t]}</button>
+                    <div className={s.tabs} style={{ marginBottom: 'var(--sp5)' }}>
+                      {(['breakdown', 'grid', 'glyph', 'json'] as Tab[]).map(t => (
+                        <button key={t} className={`${s.tab} ${tab === t ? s.tabOn : ''}`} onClick={() => setTab(t)}>
+                          {tabLabels[t]}
+                        </button>
                       ))}
                     </div>
-                    {tab==='breakdown' && <CipherPanel cipher={cipher} data={cd} />}
-                    {tab==='grid' && <LetterGrid letters={letters} values={cd.breakdown} accentVar={`--a${CIPHER_DEFS.findIndex(d=>d.key===cipher)+1}`} />}
-                    {tab==='glyph' && <GlyphMatrix word={result.original_input} cipher={cd.breakdown} />}
-                    {tab==='json' && <JsonOutput data={result} />}
+                    {tab === 'breakdown' && <CipherPanel cipher={cipher} data={cd} />}
+                    {tab === 'grid' && <LetterGrid letters={letters} values={cd.breakdown} accentVar={`--cc${CIPHER_DEFS.findIndex(d => d.key === cipher) + 1}`} />}
+                    {tab === 'glyph' && <GlyphMatrix word={result.original_input} cipher={cd.breakdown} />}
+                    {tab === 'json' && <JsonOutput data={result} />}
                   </div>
                 )}
               </>
@@ -170,7 +176,7 @@ const HomePage: NextPage = () => {
         {result && (
           <div className={s.mobileBar}>
             {CIPHER_DEFS.map(d => (
-              <button key={d.key} className={`${s.mobileChip} ${cipher===d.key?'on':''}`} onClick={()=>setCipher(d.key)}>
+              <button key={d.key} className={`${s.mobileChip} ${cipher === d.key ? 'on' : ''}`} onClick={() => setCipher(d.key)}>
                 <span className={s.mobileChipVal}>{result.ciphers[d.key].total}</span>
                 <span className={s.mobileChipLbl}>{d.name.split(' ')[0]}</span>
               </button>
@@ -181,4 +187,5 @@ const HomePage: NextPage = () => {
     </>
   );
 };
+
 export default HomePage;
