@@ -1,17 +1,8 @@
 .btn {
-  display: flex; align-items: center; justify-content: center;
-  width: 36px; height: 36px;
-  border-radius: var(--rf);
-  color: var(--txm);
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bright);
-  backdrop-filter: blur(12px);
-  transition: all var(--tt);
-  flex-shrink: 0;
+  width:34px; height:34px; border-radius:var(--rF);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--ctm); border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.04);
+  transition:all var(--mid) var(--ease);
 }
-.btn:hover {
-  color: var(--pr);
-  border-color: rgba(155,109,255,.35);
-  background: var(--prl);
-  box-shadow: 0 0 12px rgba(155,109,255,.2);
-}
+.btn:hover { color:var(--pa); border-color:rgba(124,90,245,0.4); background:var(--pl); }

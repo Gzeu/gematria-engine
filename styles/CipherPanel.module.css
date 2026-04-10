@@ -1,43 +1,16 @@
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--fm);
-  font-size: var(--tx1);
-}
+.tbl { width:100%; border-collapse:collapse; font-family:var(--fm); }
 .thead th {
-  text-align: left;
-  padding: var(--s2) var(--s3);
-  font-size: var(--tx0); font-weight: 700;
-  letter-spacing: .08em; text-transform: uppercase;
-  color: var(--txf);
-  border-bottom: 1px solid var(--dv);
-  font-family: var(--fb);
+  text-align:left; padding:var(--s2) var(--s3);
+  font-size:var(--t1); font-weight:700; font-family:var(--fb);
+  letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--ctf); border-bottom:1px solid rgba(255,255,255,0.06);
 }
-.row td {
-  padding: var(--s2) var(--s3);
-  border-bottom: 1px solid color-mix(in oklch, var(--dv) 50%, transparent);
-  transition: background var(--tt);
-}
-.row:hover td { background: var(--glass-bright); }
-.row:last-child td { border-bottom: none; }
-
-.letter {
-  font-family: var(--fd); font-size: var(--tx3); font-weight: 800;
-  color: var(--tx); text-align: center; width: 36px;
-}
-.val {
-  font-weight: 700; color: var(--pr);
-  font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 12px rgba(155,109,255,.3);
-}
-.pos { color: var(--txf); width: 32px; }
-
-.total {
-  font-family: var(--fm); font-size: var(--tx2);
-  font-weight: 800; color: var(--pr);
-  padding: var(--s3) var(--s3);
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: .04em;
-}
-.totalLabel { color: var(--txm); font-weight: 500; margin-right: var(--s2); }
+.row td { padding:9px var(--s3); border-bottom:1px solid rgba(255,255,255,0.04); transition:background var(--fast); }
+.row:hover td { background:var(--cb); }
+.row:last-child td { border-bottom:none; }
+.ltr { font-family:var(--fd); font-size:var(--t4); font-weight:800; color:var(--ct); width:36px; text-align:center; }
+.num { font-weight:700; color:var(--pa); font-variant-numeric:tabular-nums; }
+.pos { color:var(--ctf); width:28px; }
+.totalRow { padding:var(--s3) var(--s3); text-align:right; font-family:var(--fm); font-size:var(--t2); }
+.totalLbl { color:var(--ctm); margin-right:var(--s2); }
+.totalVal { color:var(--pa); font-weight:700; font-variant-numeric:tabular-nums; }

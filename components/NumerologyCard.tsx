@@ -1,26 +1,18 @@
-import styles from '../styles/NumerologyCard.module.css';
-
-interface Props {
-  summary: string;
-}
-
+import React from 'react';
+import s from '../styles/NumerologyCard.module.css';
+interface Props { summary: Record<string,any>; }
 export default function NumerologyCard({ summary }: Props) {
-  // Extract base number from summary string like "...reduces to 7 — The number 7..."
-  const match = summary.match(/reduces to (\d+)/);
-  const num   = match ? parseInt(match[1]) : null;
-  const isMaster = num === 11 || num === 22 || num === 33;
-
+  if (!summary) return null;
+  const entries = Object.entries(summary).filter(([,v]) => v !== null && v !== undefined);
   return (
-    <div className={styles.card}>
-      <div className={styles.header}>
-        <span className={styles.label}>Numerology</span>
-        {num !== null && (
-          <span className={`${styles.badge} ${isMaster ? styles.master : ''}`}>
-            {isMaster ? `✦ ${num}` : num}
-          </span>
-        )}
-      </div>
-      <p className={styles.text}>{summary}</p>
+    <div className={s.card}>
+      <div className={s.title}>Numerology</div>
+      {entries.map(([k,v]) => (
+        <div key={k} className={s.row}>
+          <span className={s.lbl}>{k.replace(/_/g,' ')}</span>
+          <span className={s.val}>{typeof v==='object'?JSON.stringify(v):String(v)}</span>
+        </div>
+      ))}
     </div>
   );
 }

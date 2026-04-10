@@ -1,14 +1,10 @@
 .wrap {
-  background: color-mix(in oklch, var(--bg) 80%, transparent);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--rm);
-  padding: var(--s4) var(--s5);
-  overflow-x: auto;
-  font-family: var(--fm);
-  font-size: var(--tx0);
-  line-height: 1.7;
-  color: var(--txm);
-  max-height: 500px;
-  scrollbar-width: thin;
+  background:rgba(7,6,13,0.7);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:var(--r2);
+  padding:var(--s4) var(--s5);
+  overflow-x:auto; max-height:480px; scrollbar-width:thin;
+  font-family:var(--fm); font-size:var(--t1); line-height:1.75;
+  color:var(--ctm);
 }
-.wrap pre { white-space: pre-wrap; word-break: break-all; }
+.wrap pre { white-space:pre-wrap; word-break:break-all; }
