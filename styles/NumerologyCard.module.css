@@ -1,32 +1,45 @@
 .card {
-  background: linear-gradient(135deg,
-    color-mix(in oklch, var(--pr) 6%, var(--sf)),
-    color-mix(in oklch, var(--a3) 4%, var(--sf)));
-  border: 1px solid color-mix(in oklch, var(--pr) 20%, var(--br));
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
   border-radius: var(--rl);
   padding: var(--s4);
-  animation: fadeUp .4s .1s cubic-bezier(.16,1,.3,1) both;
+  display: flex; flex-direction: column; gap: var(--s3);
 }
-.header {
-  display: flex; align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--s3);
-}
-.label {
+
+.title {
   font-size: var(--tx0); font-weight: 700;
-  letter-spacing: .1em; text-transform: uppercase;
+  letter-spacing: .10em; text-transform: uppercase;
   color: var(--txf);
+  font-family: var(--fb);
 }
-.badge {
-  font-family: var(--fm); font-size: var(--tx4); font-weight: 900;
-  color: var(--pr); line-height: 1;
+
+.row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s3);
+  padding: var(--s2) 0;
+  border-bottom: 1px solid color-mix(in oklch, var(--dv) 60%, transparent);
+}
+.row:last-child { border-bottom: none; }
+
+.label {
+  font-size: var(--tx0); color: var(--txm);
+  font-family: var(--fb); font-weight: 500;
+  letter-spacing: .02em;
+}
+
+.val {
+  font-family: var(--fm); font-size: var(--tx3); font-weight: 900;
+  color: var(--pr);
   font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 16px rgba(155,109,255,.4);
+  line-height: 1;
 }
-.master {
-  color: var(--a2) !important;
-  text-shadow: 0 0 20px color-mix(in oklch, var(--a2) 50%, transparent);
-}
-.text {
-  font-size: var(--tx1); color: var(--txm);
-  line-height: 1.65;
+
+.meaning {
+  font-size: var(--tx0); color: var(--txf);
+  font-style: italic;
+  line-height: 1.5;
+  letter-spacing: .01em;
 }

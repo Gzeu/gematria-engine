@@ -1,3 +1,25 @@
-.logo { display: flex; align-items: center; gap: var(--s3); }
-.name { font-family: var(--fd); font-size: var(--tx3); line-height: 1; letter-spacing: -.01em; }
-.ver { font-size: var(--tx0); color: var(--txm); font-family: var(--fm); }
+.logo {
+  display: flex; align-items: center; gap: var(--s3);
+  font-family: var(--fd);
+  font-size: var(--tx2);
+  font-weight: 800;
+  color: var(--tx);
+  letter-spacing: -.01em;
+  text-decoration: none;
+}
+.logo span {
+  background: linear-gradient(135deg, var(--pr) 0%, var(--a3) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 0 8px rgba(155,109,255,.4));
+}
+.mark {
+  width: 28px; height: 28px;
+  border-radius: var(--rm);
+  background: linear-gradient(135deg, var(--pr) 0%, var(--a3) 100%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 16px rgba(155,109,255,.4);
+  flex-shrink: 0;
+}

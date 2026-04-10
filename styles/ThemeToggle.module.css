@@ -1,2 +1,17 @@
-.btn { width: 32px; height: 32px; border-radius: var(--rf); background: var(--sfo); border: 1px solid var(--br); display: flex; align-items: center; justify-content: center; color: var(--txm); transition: all var(--tt); }
-.btn:hover { background: var(--sfd); color: var(--tx); }
+.btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: var(--rf);
+  color: var(--txm);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bright);
+  backdrop-filter: blur(12px);
+  transition: all var(--tt);
+  flex-shrink: 0;
+}
+.btn:hover {
+  color: var(--pr);
+  border-color: rgba(155,109,255,.35);
+  background: var(--prl);
+  box-shadow: 0 0 12px rgba(155,109,255,.2);
+}
