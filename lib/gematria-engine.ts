@@ -69,7 +69,7 @@ const MAPS: Record<CipherKey, Record<string, number>> = {
 };
 
 // ─── WORD DICTIONARY ──────────────────────────────────────────────────────────
-const WORD_LIST: string[] = [
+export const WORD_LIST: string[] = [
   "sun","moon","star","fire","earth","water","wind","love","life","soul","gold",
   "king","god","sky","sea","tree","day","time","mind","word","light","dark","truth",
   "power","faith","hope","peace","joy","grace","will","free","name","real","true",
